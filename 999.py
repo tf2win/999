@@ -59,8 +59,8 @@ ensure_ascii=False, sort_keys=True)
 def fetch_landsnet_data():
     time.sleep(1)
     landsnet_page =
-'https://www.landsnet.is/flutningskerfid/kerfisstjornun/aflflutningur-nuna/'
-    url = 'https://amper.landsnet.is/MapData/api/measurements'
+'https:///'
+    url = 'https://'
     res = requests.get(url)
     data = res.json()
     better_data = {}
