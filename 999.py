@@ -41,8 +41,6 @@ num = {' ':(0,0,0,0,0,0,0),
     '9':(1,1,1,1,0,1,1)}
 # Búið að setja upp seven segment skjá
 # pip install requests
-# C:\Users\Sigurduroo\Desktop\py>python landsnet_data.py
-
 LANDSNET_DATA = None
 def save_to_json(filepath, data, pretty=False):
     '''
