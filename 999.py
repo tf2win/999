@@ -50,8 +50,7 @@ def save_to_json(filepath, data, pretty=False):
         data_text = json.dumps(data, indent=4, ensure_ascii=False,sort_keys=True)
     else:
         data_text = json.dumps(data, separators=(',', ':'),ensure_ascii=False, sort_keys=True)
-    with open(filepath, mode='w', encoding='utf-8') as json_file:
-        json_file.write(data_text)
+    with open(filepath, mode='w', encoding='utf-8') as json_file:json_file.write(data_text)
 def fetch_landsnet_data():
     time.sleep(1)
     landsnet_page ='https:///'
