@@ -47,17 +47,14 @@ def save_to_json(filepath, data, pretty=False):
     takes in filepath and data object saves data to json in filepath
     '''
     if pretty:
-        data_text = json.dumps(data, indent=4, ensure_ascii=False,
-sort_keys=True)
+        data_text = json.dumps(data, indent=4, ensure_ascii=False,sort_keys=True)
     else:
-        data_text = json.dumps(data, separators=(',', ':'),
-ensure_ascii=False, sort_keys=True)
+        data_text = json.dumps(data, separators=(',', ':'),ensure_ascii=False, sort_keys=True)
     with open(filepath, mode='w', encoding='utf-8') as json_file:
         json_file.write(data_text)
 def fetch_landsnet_data():
     time.sleep(1)
-    landsnet_page =
-'https:///'
+    landsnet_page ='https:///'
     url = 'https://'
     res = requests.get(url)
     data = res.json()
@@ -81,8 +78,7 @@ def fetch_landsnet_data():
     if gogn1 < 0:
         gogn1_formatted == gogn1
     else:
-        gogn1_formatted = gogn1/pow(10,staerdargrada_gogn1)*1000 #
-Talan sett á staðlað form
+        gogn1_formatted = gogn1/pow(10,staerdargrada_gogn1)*1000 # Talan sett á staðlað form
     # Seven segment keyrsla:
 
     try:
@@ -98,41 +94,32 @@ Talan sett á staðlað form
             #  print(a)
             s = str(a)  # Hér seturðu inn töluna sem þú vilt birta.
 
-            if staerdargrada_gogn1 > 3:  # Ef talan er stærri en 9999
-þá birtist 9999 á skjánum
+            if staerdargrada_gogn1 > 3:  # Ef talan er stærri en 9999 þá birtist 9999 á skjánum
                 s = '9999'
-            elif staerdargrada_gogn1 == -1: # Ef talan er núll komma
-eitthvað þá bætist 0 framan á strenginn
+            elif staerdargrada_gogn1 == -1: # Ef talan er núll komma eitthvað þá bætist 0 framan á strenginn
                 s = '0' + s
-            elif staerdargrada_gogn1 == -2: # Ef talan byrjar á 0.0
-bætist 00 framan á strenginn
+            elif staerdargrada_gogn1 == -2: # Ef talan byrjar á 0.0 bætist 00 framan á strenginn
                 s = '0' + '0' + s
-            elif staerdargrada_gogn1 == -3: # Ef talan byrjar á 0.00
-bætist 000 framan á strenginn
+            elif staerdargrada_gogn1 == -3: # Ef talan byrjar á 0.00 bætist 000 framan á strenginn
                 s = '0' + '0' + '0' + s
-            elif staerdargrada_gogn1 < -3: # Ef talan byrjar á 0.000
-þá birtist 0000 á skjánum
+            elif staerdargrada_gogn1 < -3: # Ef talan byrjar á 0.000 þá birtist 0000 á skjánum
                 s = '0000'
             for digit in range(4):
                 for loop in range(0,7):
                     GPIO.output(segments[loop], num[s[digit]][loop])
 # Hér kemur á dislpaly
-                    #if (int(time.ctime()[18:19])%2 == 0) and (digit
-== 1): # Hér er staðeing puntins.gp
+                    #if (int(time.ctime()[18:19])%2 == 0) and (digit == 1): # Hér er staðeing puntins.gp
                     #    GPIO.output(25, 1)
                     #else:
                     #    GPIO.output(25, 0)
-                    if -3 <= staerdargrada_gogn1 < 1 and digit == 0: #
-Staðsetning punkts fyrir litla tölu
+                    if -3 <= staerdargrada_gogn1 < 1 and digit == 0: # Staðsetning punkts fyrir litla tölu
                         GPIO.output(25,1)
-                    elif staerdargrada_gogn1 == 1 and digit == 1: #
-Staðsetning punkts fyrir tugatölu
+                    elif staerdargrada_gogn1 == 1 and digit == 1: # Staðsetning punkts fyrir tugatölu
                         GPIO.output(25,1)
-                    elif staerdargrada_gogn1 == 2 and digit == 2: #
-Staðsetning punkts fyrir hundruð
+                    elif staerdargrada_gogn1 == 2 and digit == 2: # Staðsetning punkts fyrir hundruð
                         GPIO.output(25,1)
                 GPIO.output(digits[digit], 0)
-                time.sleep(0.001) # Skiptir á milli dig hraðin
+                time.sleep(0.001) # Skiptir á milli dig hraðin 
                 GPIO.output(digits[digit], 1)
                 GPIO.output(25,0)
 
