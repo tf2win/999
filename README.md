@@ -12,3 +12,14 @@ The main parts of the code:
 fetch_landsnet_data(): This method fetches data from Landsnet by sending an HTTP request to their website. It uses the requests package to make the request and get the response as a JSON database. The response is saved in a better_data.json file with the help of the save_to_json() method. This method also performs calculations on the data displayed on the seventh-person display.
 main(): This method runs the program and maintains updates of the data from Landsnet. It uses fetch_landsnet_data() to update the data and keeps a timestamp for the last update. If the data is older than 300 seconds, fetch_landsnet_data() is called to refresh the data. This method is in an infinite loop, so it will continue running without end.
 To run the code, it is placed in the if __name__ == '__main__': block along with the `
+
+things to install on rasppsery pi , 
+# sudo apt-get install python 
+# sudo apt-get update
+# sudo apt-get install rpi.gpio
+# sudo apt-get install -y python-requests
+# sudo apt-get install python time
+# sudo apt-get install python math
+# sudo pip install requests
+# sudo pip3 install requests
+# sudo apt-get upgrade
