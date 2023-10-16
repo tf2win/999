@@ -1,0 +1,23 @@
+import RPi.GPIO as GPIO
+import time
+
+# Stillum GPIO-pinna
+pin = 36
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(pin, GPIO.OUT)
+
+try:
+    while True:
+        # Gefum 3,3 volt í 500ms
+        GPIO.output(pin, GPIO.HIGH)
+        time.sleep(1.5)
+
+        # Slekkum
+        GPIO.output(pin, GPIO.LOW)
+
+        # Bíðum í 2 sekúndur
+        time.sleep(2.5)
+
+except KeyboardInterrupt:
+    # Ef forritið er stoppað með Ctrl+C, þá hreinsum við upp
+    GPIO.cleanup()
