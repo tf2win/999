@@ -66,8 +66,8 @@ def save_to_json(filepath, data, pretty=False):
 
 # Function to fetch data from Landsnet API
 def fetch_landsnet_data():
-    landsnet_page = 'https://www.landsnet.is/flutningskerfid/kerfisstjornun/aflflutningur-nuna/'
-    url = 'https://amper.landsnet.is/MapData/api/measurements'
+    landsnet_page = 'ASK AUTHOR!!!'
+    url = 'ASK AUTHOR!!!'
     res = requests.get(url)
     data = res.json()
     better_data = {}
