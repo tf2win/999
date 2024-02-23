@@ -1,0 +1,129 @@
+#!/usr/bin/python
+# Import necessary libraries
+import json  # Library for JSON manipulation
+import time  # Library for time-related functions
+import math  # Library for mathematical functions
+import requests  # Library for making HTTP requests
+import RPi.GPIO as GPIO  # Library for controlling Raspberry Pi GPIO pins
+
+# Set up GPIO pin numbering mode
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+# Define GPIO ports for the 7-segment display pins
+segments = (11, 4, 23, 8, 7, 10, 18, 25)
+# GPIO ports for the 7-segment display segments
+
+# Set up GPIO pins for the 7-segment display segments
+for segment in segments:
+    GPIO.setup(segment, GPIO.OUT)
+    GPIO.output(segment, 0)  # Initialize segments to off state
+
+# Define GPIO ports for the digit 0-3 pins
+digits = (22, 27, 17, 24)
+# GPIO ports for selecting digits of the display
+
+# Set up GPIO pins for selecting digits of the display
+for digit in digits:
+    GPIO.setup(digit, GPIO.OUT)
+    GPIO.output(digit, 1)  # Initialize digits to off state
+
+# Define the mapping of numbers to seven-segment display patterns
+num = {' ': (0, 0, 0, 0, 0, 0, 0),  # Blank
+       '0': (1, 1, 1, 1, 1, 1, 0),  # 0
+       '1': (0, 1, 1, 0, 0, 0, 0),  # 1
+       '2': (1, 1, 0, 1, 1, 0, 1),  # 2
+       '3': (1, 1, 1, 1, 0, 0, 1),  # 3
+       '4': (0, 1, 1, 0, 0, 1, 1),  # 4
+       '5': (1, 0, 1, 1, 0, 1, 1),  # 5
+       '6': (1, 0, 1, 1, 1, 1, 1),  # 6
+       '7': (1, 1, 1, 0, 0, 0, 0),  # 7
+       '8': (1, 1, 1, 1, 1, 1, 1),  # 8
+       '9': (1, 1, 1, 1, 0, 1, 1)}  # 9
+# Mapping of digits to their corresponding 7-segment patterns
+LANDSNET_DATA = None  # Variable to store Landsnet data
+
+# Function to save data to a JSON file
+def save_to_json(filepath, data, pretty=False):
+    if pretty:
+        data_text = json.dumps(data, indent=4, ensure_ascii=False, sort_keys=True)
+    else:
+        data_text = json.dumps(data, separators=(',', ':'), ensure_ascii=False, sort_keys=True)
+    with open(filepath, mode='w', encoding='utf-8') as json_file:
+        json_file.write(data_text)
+
+# Function to fetch data from Landsnet API
+def fetch_landsnet_data():
+    # Define Landsnet API URL
+    url = 'https://amper.landsnet.is/MapData/api/measurements'
+    # Make HTTP GET request to Landsnet API
+    res = requests.get(url)
+    # Parse JSON response
+    data = res.json()
+    better_data = {}
+    # Process each measurement in the response
+    for measurement in data:
+        better_data[measurement['key']] = measurement
+    # Save processed data to a JSON file
+    save_to_json('better_data.json', better_data, pretty=True)
+    # Extract relevant data
+    gogn1 = better_data['TA1']['MW']
+    gogn2 = better_data['TA1']['time']
+    print("Hello world")  
+    print(gogn1) 
+    print(gogn2)
+
+    # Calculate the number of digits in the data
+    if gogn1 == 0:
+        staerdargrada_gogn1 = 0
+    else:
+        staerdargrada_gogn1 = int(math.floor(math.log10(abs(gogn1))))
+    if gogn1 < 0:
+        gogn1_formatted = gogn1
+    else:
+        gogn1_formatted = gogn1 / pow(10, staerdargrada_gogn1) * 1000
+
+    # Display data on the seven-segment display
+    try:
+        while True:
+            if gogn1_formatted == 0:
+                a = 0
+            else:
+                a = int(gogn1_formatted)
+            s = str(a)
+            if staerdargrada_gogn1 > 3:
+                s = '9999'
+            elif staerdargrada_gogn1 == -1:
+                s = '0' + s
+            elif staerdargrada_gogn1 == -2:
+                s = '0' + '0' + s
+            elif staerdargrada_gogn1 == -3:
+                s = '0' + '0' + '0' + s
+            elif staerdargrada_gogn1 < -3:
+                s = '0000'
+            for digit in range(4):
+                for loop in range(0, 7):
+                    GPIO.output(segments[loop], num[s[digit]][loop])
+                    if -3 <= staerdargrada_gogn1 < 1 and digit == 0:
+                        GPIO.output(25, 1)
+                    elif staerdargrada_gogn1 == 1 and digit == 1:
+                        GPIO.output(25, 1)
+                    elif staerdargrada_gogn1 == 2 and digit == 2:
+                        GPIO.output(25, 1)
+                GPIO.output(digits[digit], 0)
+                time.sleep(0.0002)
+                GPIO.output(digits[digit], 1)
+                GPIO.output(25, 0)
+    finally:
+        GPIO.cleanup()
+
+# Main function to run the program
+def main():
+    fetch_landsnet_data()
+
+if __name__ == '__main__':
+    try:
+        main()
+    finally:
+        GPIO.cleanup()
+
