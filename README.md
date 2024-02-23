@@ -1,3 +1,8 @@
+!!!
+Feb 2024 
+The problem that remains to be solved is that once the code has retrieved data and displayed on the 7 segment, the program stops and displays mu data but does not start fetching new data every 5 min for the numbers to appear on the segment led New data not coming on 7 segment display
+!!!
+
 juni 2023 
 The beginning of the code contains import statements to download the necessary packages and configure the environment for the Raspberry Pi.
 Definition of GPIO connections for the seventh-party display and joystick for the numeric values on the display.
